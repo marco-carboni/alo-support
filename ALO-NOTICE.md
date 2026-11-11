@@ -39,8 +39,13 @@ Per Windows l'icona è quella ALO fornita dal proprietario: `res/icon.png`, `res
 
 Ancora quelli di RustDesk (segnaposto, da sostituire quando si prepara la versione macOS o la documentazione):
 
-- `res/mac-icon.png`, `res/mac-tray-dark-x2.png`, `res/mac-tray-light-x2.png`
 - `res/scalable.svg`, `res/logo.svg`, `res/logo-header.svg`, `res/design.svg`, `res/rustdesk-banner.svg`
+
+## Modifiche per macOS (aarch64)
+
+8. **Nome e identificatori** (`flutter/macos/Runner/Configs/AppInfo.xcconfig`, `project.pbxproj`, `Info.plist`, `build.py`): applicazione `ALO Support.app`, bundle identifier `zone.alo.support` (diverso da quello di RustDesk, per non condividere i permessi di sistema).
+9. **Target minimo macOS 12.3** (`Podfile`, `Cargo.toml`, `build.py`, `project.pbxproj`): richiesto dai Xcode recenti; i Pod sono allineati allo stesso target nel `post_install`.
+10. **Icone macOS**: `flutter/macos/Runner/AppIcon.icns` e `res/mac-icon.png` dal logo ALO; `res/mac-tray-dark-x2.png` e `res/mac-tray-light-x2.png` sono la silhouette "template" del logo per la barra dei menu.
 
 ## Note
 
