@@ -8,6 +8,9 @@
   <b>We need your help to translate this README, <a href="https://github.com/rustdesk/rustdesk/tree/master/src/lang">RustDesk UI</a> and <a href="https://github.com/rustdesk/doc.rustdesk.com">RustDesk Doc</a> to your native language</b>
 </p>
 
+> [!Note]
+> **ALO Support** is a fork of RustDesk 1.5.1 with a preset server. See [ALO-NOTICE.md](ALO-NOTICE.md) for the changes and the [code signing policy](CODE_SIGNING_POLICY.md).
+
 > [!Caution]
 > **Misuse Disclaimer:** <br>
 > The developers of RustDesk do not condone or support any unethical or illegal use of this software. Misuse, such as unauthorized access, control or invasion of privacy, is strictly against our guidelines. The authors are not responsible for any misuse of the application.
