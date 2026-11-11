@@ -2625,10 +2625,10 @@ class _AboutState extends State<_About> {
                   ).marginSymmetric(vertical: 4.0)),
               InkWell(
                   onTap: () {
-                    launchUrlString('https://rustdesk.com');
+                    launchUrlString('https://alo.zone');
                   },
                   child: Text(
-                    translate('Website'),
+                    'Website: alo.zone',
                     style: linkStyle,
                   ).marginSymmetric(vertical: 4.0)),
               InkWell(
@@ -2636,11 +2636,11 @@ class _AboutState extends State<_About> {
                     launchUrlString('https://github.com/marco-carboni/alo-support');
                   },
                   child: Text(
-                    'Source code: https://github.com/marco-carboni/alo-support',
+                    'Source code',
                     style: linkStyle,
                   ).marginSymmetric(vertical: 4.0)),
               SelectionArea(
-                  child: const Text('Basato su RustDesk (AGPL-3.0)')
+                  child: const Text('Based on RustDesk (AGPL-3.0)')
                       .marginSymmetric(vertical: 4.0)),
               Container(
                 decoration: const BoxDecoration(color: Color(0xFF2c8cff)),
@@ -2654,7 +2654,7 @@ class _AboutState extends State<_About> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Copyright © ${DateTime.now().toString().substring(0, 4)} Purslane Tech Pte. Ltd.\n$license',
+                            'Copyright © ${DateTime.now().toString().substring(0, 4)} Purslane Tech Pte. Ltd.\n$license\nRebuilt by ALO · alo.zone',
                             style: const TextStyle(color: Colors.white),
                           ),
                           Text(
