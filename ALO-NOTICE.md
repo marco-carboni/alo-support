@@ -26,16 +26,14 @@ Applicazione:
 
 Nessuna modifica a cifratura, protocollo o autenticazione.
 
-## Da sostituire: icone e immagini (segnaposto)
+## Icone e immagini
 
-Le icone sono ancora quelle di RustDesk, in attesa dell'icona ALO. File da sostituire:
+Per Windows l'icona è quella ALO fornita dal proprietario: `res/icon.png`, `res/32x32.png`, `res/64x64.png`, `res/128x128.png`, `res/128x128@2x.png`, `res/icon.ico`, `res/tray-icon.ico`, `flutter/windows/runner/resources/app_icon.ico` e `flutter/assets/icon.svg` (ridisegnata in vettoriale).
 
-- `res/icon.ico`, `res/tray-icon.ico`, `res/icon.png`
-- `res/32x32.png`, `res/64x64.png`, `res/128x128.png`, `res/128x128@2x.png`
+Ancora quelli di RustDesk (segnaposto, da sostituire quando si prepara la versione macOS o la documentazione):
+
 - `res/mac-icon.png`, `res/mac-tray-dark-x2.png`, `res/mac-tray-light-x2.png`
 - `res/scalable.svg`, `res/logo.svg`, `res/logo-header.svg`, `res/design.svg`, `res/rustdesk-banner.svg`
-- `flutter/windows/runner/resources/app_icon.ico`
-- `flutter/assets/icon.svg`
 
 ## Note
 
