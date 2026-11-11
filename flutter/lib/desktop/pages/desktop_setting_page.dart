@@ -2631,6 +2631,17 @@ class _AboutState extends State<_About> {
                     translate('Website'),
                     style: linkStyle,
                   ).marginSymmetric(vertical: 4.0)),
+              InkWell(
+                  onTap: () {
+                    launchUrlString('https://github.com/marco-carboni/alo-support');
+                  },
+                  child: Text(
+                    'Source code: https://github.com/marco-carboni/alo-support',
+                    style: linkStyle,
+                  ).marginSymmetric(vertical: 4.0)),
+              SelectionArea(
+                  child: const Text('Basato su RustDesk (AGPL-3.0)')
+                      .marginSymmetric(vertical: 4.0)),
               Container(
                 decoration: const BoxDecoration(color: Color(0xFF2c8cff)),
                 padding:
