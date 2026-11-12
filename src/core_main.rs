@@ -204,6 +204,10 @@ pub fn core_main() -> Option<CoreMainAction> {
         crate::platform::elevate_or_run_as_system(click_setup, _is_elevate, _is_run_as_system);
         return None;
     }
+    #[cfg(windows)]
+    if args.is_empty() || args[0].starts_with(&crate::get_uri_prefix()) {
+        crate::alo_link::register_scheme();
+    }
     if args.is_empty() || crate::common::is_empty_uni_link(&args[0]) {
         #[cfg(target_os = "macos")]
         {
