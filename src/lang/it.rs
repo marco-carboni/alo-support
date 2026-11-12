@@ -824,5 +824,17 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Trust duration (days)", "Durata attendibilità (giorni)"),
         ("Renew trust", "Rinnova attendibilità"),
         ("install-directory-not-empty-tip", "La cartella selezionata non è vuota. L'installazione potrebbe eliminare i dati esistenti. Valuta la possibilità di scegliere una cartella diversa."),
+        ("Link this PC to the support ticket", "Collega questo PC al ticket"),
+        ("Link this PC to the support ticket? ALO will receive: this program's ID, the PC name and the times of support connections.", "Collegare questo PC al ticket di assistenza? Verranno inviati ad ALO: l'ID di questo programma, il nome del PC e gli orari delle connessioni di assistenza."),
+        ("Link", "Collega"),
+        ("Invalid assistance link", "Link di assistenza non valido"),
+        ("Invalid assistance code", "Codice di assistenza non valido"),
+        ("This link or code has expired", "Questo link o codice è scaduto"),
+        ("This link or code was already used", "Questo link o codice è già stato usato"),
+        ("This program is linked to another customer", "Questo programma è già collegato a un altro cliente"),
+        ("Too many attempts, try again later", "Troppi tentativi, riprova più tardi"),
+        ("Could not link, try again", "Collegamento non riuscito, controlla la rete e riprova"),
+        ("Linked to ticket", "Collegato al ticket"),
+        ("Assistance code", "Codice di assistenza"),
     ].iter().cloned().collect();
 }
