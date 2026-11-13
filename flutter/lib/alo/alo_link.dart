@@ -281,7 +281,6 @@ class _AloLinkCardState extends State<AloLinkCard> {
         borderRadius: BorderRadius.circular(13),
         border: Border.all(color: Theme.of(context).dividerColor),
       ),
-      margin: const EdgeInsets.only(right: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

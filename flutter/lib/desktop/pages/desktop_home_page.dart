@@ -64,8 +64,15 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildLeftPane(context),
-        if (!isIncomingOnly) const VerticalDivider(width: 1),
+        AnimatedBuilder(
+          animation: aloLinked,
+          builder: (_, __) => aloLinked.value
+              ? Row(children: [
+                  buildLeftPane(context),
+                  if (!isIncomingOnly) const VerticalDivider(width: 1),
+                ])
+              : const SizedBox.shrink(),
+        ),
         if (!isIncomingOnly) Expanded(child: buildRightPane(context)),
       ],
     ));
@@ -90,16 +97,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         alignment: Alignment.center,
         child: loadLogo(),
       ),
-      AnimatedBuilder(
-        animation: aloLinked,
-        builder: (_, __) => aloLinked.value
-            ? Column(children: [
-                buildTip(context),
-                if (!isOutgoingOnly) buildIDBoard(context),
-                if (!isOutgoingOnly) buildPasswordBoard(context),
-              ])
-            : const SizedBox.shrink(),
-      ),
+      buildTip(context),
+      if (!isOutgoingOnly) buildIDBoard(context),
+      if (!isOutgoingOnly) buildPasswordBoard(context),
       FutureBuilder<Widget>(
         future: Future.value(
             Obx(() => buildHelpCards(stateGlobal.updateUrl.value))),
