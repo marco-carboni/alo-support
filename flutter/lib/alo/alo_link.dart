@@ -275,26 +275,42 @@ class _AloLinkCardState extends State<AloLinkCard> {
   @override
   Widget build(BuildContext context) {
     if (aloLinked.value) return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 16, top: 8, bottom: 8),
-      child: Row(children: [
-        Expanded(
-          child: TextField(
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(13),
+        border: Border.all(color: Theme.of(context).dividerColor),
+      ),
+      margin: const EdgeInsets.only(right: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(translate('Assistance code'),
+              style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 4),
+          Text(translate('Enter the code received from ALO to link this PC'),
+              style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 14),
+          TextField(
             controller: _ctl,
-            decoration: InputDecoration(
-              isDense: true,
-              labelText: translate('Assistance code'),
+            autofocus: true,
+            style: const TextStyle(fontSize: 26, letterSpacing: 2),
+            decoration: const InputDecoration(
               hintText: 'XXXX-XXXX',
+              contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             ),
             onSubmitted: (v) => aloEnrollWithCode(v),
           ),
-        ),
-        const SizedBox(width: 8),
-        ElevatedButton(
-          onPressed: () => aloEnrollWithCode(_ctl.text),
-          child: Text(translate('Link')),
-        ),
-      ]),
+          const SizedBox(height: 12),
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton(
+              onPressed: () => aloEnrollWithCode(_ctl.text),
+              child: Text(translate('Link')),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

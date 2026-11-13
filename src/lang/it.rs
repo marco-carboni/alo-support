@@ -836,5 +836,6 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Could not link, try again", "Collegamento non riuscito, controlla la rete e riprova"),
         ("Linked to ticket", "Collegato al ticket"),
         ("Assistance code", "Codice di assistenza"),
+        ("Enter the code received from ALO to link this PC", "Inserisci il codice ricevuto da ALO per collegare questo PC"),
     ].iter().cloned().collect();
 }
