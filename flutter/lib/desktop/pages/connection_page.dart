@@ -304,6 +304,41 @@ class _ConnectionPageState extends State<ConnectionPage>
 
   @override
   Widget build(BuildContext context) {
+    return AnimatedBuilder(
+        animation: aloLinked,
+        builder: (_, __) =>
+            aloLinked.value ? _buildLinked(context) : _buildUnlinked(context));
+  }
+
+  Widget _buildUnlinked(BuildContext context) {
+    final isOutgoingOnly = bind.isOutgoingOnly();
+    return Column(
+      children: [
+        Expanded(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 480),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    loadLogo(),
+                    const SizedBox(height: 16),
+                    const AloLinkCard(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (!isOutgoingOnly) const Divider(height: 1),
+        if (!isOutgoingOnly) OnlineStatusWidget()
+      ],
+    );
+  }
+
+  Widget _buildLinked(BuildContext context) {
     final isOutgoingOnly = bind.isOutgoingOnly();
     return Column(
       children: [
@@ -312,21 +347,12 @@ class _ConnectionPageState extends State<ConnectionPage>
           children: [
             Row(
               children: [
-                Flexible(
-                    child: AnimatedBuilder(
-                        animation: aloLinked,
-                        builder: (_, __) => aloLinked.value
-                            ? _buildRemoteIDTextField(context)
-                            : const AloLinkCard())),
+                Flexible(child: _buildRemoteIDTextField(context)),
               ],
             ).marginOnly(top: 22),
             SizedBox(height: 12),
             Divider().paddingOnly(right: 12),
-            Expanded(
-                child: AnimatedBuilder(
-                    animation: aloLinked,
-                    builder: (_, __) =>
-                        aloLinked.value ? PeerTabPage() : const SizedBox())),
+            Expanded(child: PeerTabPage()),
           ],
         ).paddingOnly(left: 12.0)),
         if (!isOutgoingOnly) const Divider(height: 1),
