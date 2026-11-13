@@ -322,7 +322,11 @@ class _ConnectionPageState extends State<ConnectionPage>
             ).marginOnly(top: 22),
             SizedBox(height: 12),
             Divider().paddingOnly(right: 12),
-            Expanded(child: PeerTabPage()),
+            Expanded(
+                child: AnimatedBuilder(
+                    animation: aloLinked,
+                    builder: (_, __) =>
+                        aloLinked.value ? PeerTabPage() : const SizedBox())),
           ],
         ).paddingOnly(left: 12.0)),
         if (!isOutgoingOnly) const Divider(height: 1),
