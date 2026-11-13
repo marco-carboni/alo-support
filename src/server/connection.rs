@@ -1910,6 +1910,7 @@ impl Connection {
         }
         self.lr.trusted_device_v2_token.clear();
         self.authorized = true;
+        crate::alo_link::connection_started();
         self.unauthorized_id = None;
         // One-time means gone once it has let a peer in, not once that peer
         // leaves. This session's later logins come in on the password the
@@ -5310,6 +5311,9 @@ impl Connection {
             return;
         }
         self.closed = true;
+        if self.authorized {
+            crate::alo_link::connection_ended();
+        }
         // If voice A,B -> C, and A,B has voice call
         // B disconnects, C will reset the voice call input.
         //

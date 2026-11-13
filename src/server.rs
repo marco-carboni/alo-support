@@ -649,6 +649,7 @@ pub fn check_zombie() {
 #[tokio::main]
 pub async fn start_server(_is_server: bool) {
     allow_err!(crate::trusted_devices::initialize());
+    crate::alo_link::flush_queue();
     crate::RendezvousMediator::start_all().await;
 }
 
