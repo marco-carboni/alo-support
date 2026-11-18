@@ -8,15 +8,16 @@ import 'package:flutter_hbb/models/platform_model.dart';
 import 'package:http/http.dart' as http;
 
 /// Version sent to Odoo and shown in About.
-const String kAloVersion = '1.5.1-alo.2';
+const String kAloVersion = '1.5.1-alo.3';
 
-/// Odoo base used by the support-code fallback. Change it here only.
-/// Staging value: replace with the production domain when going live.
-const String kAloDefaultOdooBase = 'https://staging.alo.zone';
+/// Odoo base used by the support-code fallback: production. Change it here only.
+/// Staging links (https://staging.alo.zone) still work: the allow-list is *.alo.zone.
+const String kAloDefaultOdooBase = 'https://www.alo.zone';
 
 const String _kOptOdooUrl = 'alo-odoo-url';
 const String _kOptDeviceToken = 'alo-device-token';
 const String _kOptLastHello = 'alo-last-hello';
+const String _kOptTechnician = 'alo-technician-mode';
 const String _kApiPrefix = '/alo_support/api/v1';
 
 final RxBoolLike aloLinked = RxBoolLike();
@@ -34,8 +35,8 @@ class RxBoolLike extends ChangeNotifier {
 }
 
 String _getOpt(String key) => bind.mainGetLocalOption(key: key);
-void _setOpt(String key, String value) =>
-    bind.mainSetLocalOption(key: key, value: value);
+Future<void> _setOpt(String key, String value) async =>
+    await bind.mainSetLocalOption(key: key, value: value);
 
 /// True only for https URLs whose host is under alo.zone.
 bool isAllowedOdooBase(String? base) {
@@ -62,8 +63,11 @@ String? normalizeSupportCode(String input) {
 
 bool aloIsLinked() => _getOpt(_kOptDeviceToken).isNotEmpty;
 
+bool aloIsTechnician() => _getOpt(_kOptTechnician) == 'Y';
+
+/// `aloLinked` means "show the full interface": linked customer or technician mode.
 void aloRefreshLinkState() {
-  aloLinked.value = aloIsLinked();
+  aloLinked.value = aloIsLinked() || aloIsTechnician();
 }
 
 Uri? _parse(List<String>? cmdArgs, Uri? uri, String? uriString) {
@@ -76,8 +80,18 @@ Uri? _parse(List<String>? cmdArgs, Uri? uri, String? uriString) {
 /// Handles `alosupport://enroll?...`. Other links are left to the normal handler.
 bool aloHandleUriLink(List<String>? cmdArgs, Uri? uri, String? uriString) {
   final u = _parse(cmdArgs, uri, uriString);
+  if (u != null && u.scheme == 'alosupport' && u.authority == 'technician') {
+    Timer(const Duration(milliseconds: 500), _confirmTechnicianMode);
+    return true;
+  }
   if (u == null || u.scheme != 'alosupport' || u.authority != 'enroll') {
     return false;
+  }
+  if (aloIsTechnician()) {
+    Timer(const Duration(seconds: 1), () {
+      _showMessage(translate('Technician mode is on: turn it off to link this PC'));
+    });
+    return true;
   }
   final base = u.queryParameters['u'];
   final token = u.queryParameters['t'];
@@ -95,6 +109,7 @@ bool aloHandleUriLink(List<String>? cmdArgs, Uri? uri, String? uriString) {
 
 /// Support-code fallback (button on the home page).
 Future<void> aloEnrollWithCode(String input) async {
+  if (aloIsTechnician()) return;
   final code = normalizeSupportCode(input);
   if (code == null) {
     _showMessage(translate('Invalid assistance code'));
@@ -110,6 +125,31 @@ void _showMessage(String text) {
         onSubmit: close,
         onCancel: close,
       ));
+}
+
+void _confirmTechnicianMode() {
+  final on = aloIsTechnician();
+  gFFI.dialogManager.show((setState, close, context) {
+    submit() async {
+      close();
+      await _setOpt(_kOptTechnician, on ? 'N' : 'Y');
+      aloRefreshLinkState();
+    }
+
+    return CustomAlertDialog(
+      title: Text(translate('Technician mode')),
+      content: Text(on
+          ? translate('Turn off technician mode and go back to the customer view?')
+          : translate(
+              'Technician mode shows the connection field and the recent connections. This program will not link to support tickets or send connection times to ALO. Turn it on?')),
+      actions: [
+        dialogButton('Cancel', onPressed: close, isOutline: true),
+        dialogButton(on ? 'Turn off' : 'Turn on', onPressed: submit),
+      ],
+      onSubmit: submit,
+      onCancel: close,
+    );
+  });
 }
 
 void _confirmEnroll(String base, String secret) {
@@ -201,9 +241,9 @@ Future<void> _doEnroll(String base, String secret) async {
     _showMessage(_errorText('network'));
     return;
   }
-  _setOpt(_kOptOdooUrl, base);
-  _setOpt(_kOptDeviceToken, token);
-  _setOpt(_kOptLastHello, DateTime.now().millisecondsSinceEpoch.toString());
+  await _setOpt(_kOptOdooUrl, base);
+  await _setOpt(_kOptDeviceToken, token);
+  await _setOpt(_kOptLastHello, DateTime.now().millisecondsSinceEpoch.toString());
   aloRefreshLinkState();
   final number = data['ticket_number']?.toString() ?? '';
   final title = data['ticket_title']?.toString() ?? '';
@@ -214,6 +254,7 @@ Future<void> _doEnroll(String base, String secret) async {
 /// Sent at every start, at most once an hour. Silent on network errors.
 Future<void> aloHello() async {
   aloRefreshLinkState();
+  if (aloIsTechnician()) return;
   final base = _getOpt(_kOptOdooUrl);
   final token = _getOpt(_kOptDeviceToken);
   if (token.isEmpty || !isAllowedOdooBase(base)) return;
@@ -237,10 +278,10 @@ Future<void> aloHello() async {
     if (res.statusCode != 200) return;
     final j = jsonDecode(utf8.decode(res.bodyBytes));
     if (j is Map && j['ok'] == true) {
-      _setOpt(_kOptLastHello, now.toString());
+      await _setOpt(_kOptLastHello, now.toString());
     } else if (j is Map && j['error'] == 'unknown_token') {
-      _setOpt(_kOptDeviceToken, '');
-      _setOpt(_kOptOdooUrl, '');
+      await _setOpt(_kOptDeviceToken, '');
+      await _setOpt(_kOptOdooUrl, '');
       aloRefreshLinkState();
     }
   } catch (_) {}

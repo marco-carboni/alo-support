@@ -4,10 +4,11 @@ use hbb_common::{config::Config, config::LocalConfig, log, tokio};
 use serde::{Deserialize, Serialize};
 use std::{path::PathBuf, sync::Mutex, time::Duration};
 
-pub const ALO_VERSION: &str = "1.5.1-alo.2";
+pub const ALO_VERSION: &str = "1.5.1-alo.3";
 const MAX_QUEUE: usize = 50;
 const OPT_URL: &str = "alo-odoo-url";
 const OPT_TOKEN: &str = "alo-device-token";
+const OPT_TECHNICIAN: &str = "alo-technician-mode";
 
 static QUEUE_LOCK: Mutex<()> = Mutex::new(());
 
@@ -32,6 +33,9 @@ fn allowed_base(base: &str) -> bool {
 
 // Read from file: the server process does not see options set later by the UI process.
 fn credentials() -> Option<(String, String)> {
+    if LocalConfig::get_option_from_file(OPT_TECHNICIAN) == "Y" {
+        return None;
+    }
     let base = LocalConfig::get_option_from_file(OPT_URL);
     let token = LocalConfig::get_option_from_file(OPT_TOKEN);
     if token.is_empty() || !allowed_base(&base) {
