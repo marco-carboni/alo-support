@@ -837,5 +837,11 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Linked to ticket", "Collegato al ticket"),
         ("Assistance code", "Codice di assistenza"),
         ("Enter the code received from ALO to link this PC", "Inserisci il codice ricevuto da ALO per collegare questo PC"),
+        ("Technician mode", "Modalità tecnico"),
+        ("Technician mode shows the connection field and the recent connections. This program will not link to support tickets or send connection times to ALO. Turn it on?", "La modalità tecnico mostra il campo di connessione e i collegamenti recenti. Questo programma non si collegherà ai ticket di assistenza e non invierà gli orari delle connessioni ad ALO. Attivarla?"),
+        ("Turn off technician mode and go back to the customer view?", "Disattivare la modalità tecnico e tornare alla vista cliente?"),
+        ("Turn on", "Attiva"),
+        ("Turn off", "Disattiva"),
+        ("Technician mode is on: turn it off to link this PC", "Modalità tecnico attiva: disattivala per collegare questo PC"),
     ].iter().cloned().collect();
 }
